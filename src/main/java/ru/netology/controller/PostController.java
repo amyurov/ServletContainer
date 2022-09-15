@@ -1,7 +1,6 @@
 package ru.netology.controller;
 
 import com.google.gson.Gson;
-import org.springframework.stereotype.Controller;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.service.PostService;
@@ -57,9 +56,10 @@ public class PostController {
         response.setContentType(APPLICATION_JSON);
         try {
             service.removeById(id);
+            response.getWriter().print("Post with id: " + id + "has been removed");
         } catch (NotFoundException ex) {
             response.setStatus(SC_NOT_FOUND);
         }
-        response.getWriter().print("Post with id: " + id + "has been removed");
     }
+
 }
