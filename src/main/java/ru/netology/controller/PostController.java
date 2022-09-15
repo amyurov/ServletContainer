@@ -57,9 +57,9 @@ public class PostController {
         response.setContentType(APPLICATION_JSON);
         try {
             service.removeById(id);
+            response.getWriter().print("Post with id: " + id + "has been removed");
         } catch (NotFoundException ex) {
             response.setStatus(SC_NOT_FOUND);
         }
-        response.getWriter().print("Post with id: " + id + "has been removed");
     }
 }
