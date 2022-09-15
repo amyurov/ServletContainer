@@ -13,7 +13,7 @@ public class PostRepository {
     private AtomicLong indexPointer; // Счетчик новых постов. Или указатель т.к. указывает на индекс для нового поста. Начинается с 1.
 
     public PostRepository() {
-        this.storage = new ConcurrentHashMap();
+        this.storage = new ConcurrentHashMap<>();
         this.indexPointer = new AtomicLong(1);
     }
 
@@ -25,10 +25,10 @@ public class PostRepository {
         return Collections.emptyList();
     }
 
-    public Optional<Post> getById(long id) {
+    public Optional<Post> getById(long id) throws NotFoundException {
         if (storage.containsKey(id)) {
             return Optional.of(storage.get(id));
-        } else throw new NotFoundException("Поста с данным id нет");
+        } else throw new NotFoundException("No post with id " + id);
     }
 
     /*
@@ -69,7 +69,12 @@ public class PostRepository {
         return post;
     }
 
-    public void removeById(long id) {
-        storage.remove(id);
+    public void removeById(long id) throws NotFoundException {
+        if (storage.containsKey(id)) {
+            storage.remove(id);
+        } else {
+            throw new NullPointerException("No post with id " + id);
+        }
+
     }
 }
