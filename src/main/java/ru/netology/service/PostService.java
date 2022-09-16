@@ -3,38 +3,42 @@ package ru.netology.service;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.PostRepository;
-import ru.netology.repository.PostRepositoryImpl;
 
 import java.util.List;
 
-public class PostService {
+public class PostService implements IPostService {
     private final PostRepository repository;
 
     public PostService(PostRepository repository) {
         this.repository = repository;
     }
 
+    @Override
     public List<Post> all() {
         if (repository.all().isEmpty()) {
-            throw  new NotFoundException("No posts have been created yet");
+            throw new NotFoundException("No posts have been created yet");
         }
         return repository.all();
     }
 
+    @Override
     public Post getById(long id) {
         return repository.getById(id).orElseThrow(NotFoundException::new);
     }
 
+    @Override
     public Post save(Post post) {
         return repository.save(post);
     }
 
+    @Override
+    public Post update(Post post) {
+        return repository.update(post);
+    }
+
+    @Override
     public void removeById(long id) {
-        try {
-            repository.removeById(id);
-        } catch (NullPointerException ex) {
-            throw new NotFoundException("No post with id: " + id);
-        }
+        repository.removeById(id);
     }
 
 }

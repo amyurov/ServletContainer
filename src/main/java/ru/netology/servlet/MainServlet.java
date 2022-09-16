@@ -14,6 +14,7 @@ import java.io.IOException;
 public class MainServlet extends HttpServlet {
     private static final String GET = "GET";
     private static final String POST = "POST";
+    private static final String PUT = "PUT";
     private static final String DELETE = "DELETE";
 
     private PostController controller;
@@ -48,6 +49,11 @@ public class MainServlet extends HttpServlet {
 
             if (method.equals(POST) && path.equals("/api/posts")) {
                 controller.save(req.getReader(), resp);
+                return;
+            }
+
+            if (method.equals(PUT) && path.equals("/api/posts")) {
+                controller.update(req.getReader(), resp);
                 return;
             }
 
