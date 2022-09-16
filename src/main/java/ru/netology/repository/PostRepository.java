@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class PostRepository {
+public class PostRepository implements IPostRepository {
 
     private ConcurrentHashMap<Long, Post> storage; // Хранилище для постов
     private AtomicLong indexPointer; // Счетчик новых постов. Или указатель т.к. указывает на индекс для нового поста. Начинается с 1.
@@ -17,7 +17,7 @@ public class PostRepository {
         this.indexPointer = new AtomicLong(1);
     }
 
-
+    @Override
     public List<Post> all() {
         if (!storage.isEmpty()) {
             return new ArrayList<>(storage.values());
@@ -25,6 +25,7 @@ public class PostRepository {
         return Collections.emptyList();
     }
 
+    @Override
     public Optional<Post> getById(long id) throws NotFoundException {
         if (storage.containsKey(id)) {
             return Optional.of(storage.get(id));
@@ -34,20 +35,18 @@ public class PostRepository {
     /*
     Сохранение не срабатывает только при ошибке парсинга. Если запрос с id=0, то создается новый пост, id устанавливается
     автоматически.
-    При запросе с указанием id - создается новый пост, если пост с указанным id уже существует, то контент обновляется.
+    При запросе с указанием id - создается новый пост, если пост с указанным id уже существует, то 404
      */
-    public Post save(Post post) {
-        // Сначала проверяем есть ли пост с таким id. Если есть, то просто обновляем контент.
+    @Override
+    public Post save(Post post) throws NotFoundException {
+        // Сначала проверяем есть ли пост с таким id. Если есть, то NotFoundException => 404
         if (storage.containsKey(post.getId())) {
-            storage.get(post.getId())
-                    .setContent(post.getContent());
-            return post;
+            throw new NotFoundException(post.getId() + " already exist");
         }
 
         // Если поста с таким id нет, то
         // Проверяем не находится ли указатель на занятом индексе, который мы могли добавить вне очереди (не по порядку)
         if (storage.containsKey(indexPointer.get())) {
-
             // Узнаем на сколько нужно сместить указатель.
             // Иными словами считаем сколько чисел идет по порядку, начиная от того которое совпало.
             long countMatches = 0L;
@@ -69,11 +68,22 @@ public class PostRepository {
         return post;
     }
 
+    @Override
+    public Post update(Post post) throws NotFoundException {
+        if (storage.containsKey(post.getId())) {
+            storage.get(post.getId()).setContent(post.getContent());
+        return post;
+        } else {
+            throw new NotFoundException("Post with id " + post.getId() + " doesn't exist");
+        }
+    }
+
+    @Override
     public void removeById(long id) throws NotFoundException {
         if (storage.containsKey(id)) {
             storage.remove(id);
         } else {
-            throw new NullPointerException("No post with id " + id);
+            throw new NotFoundException("No post with id " + id);
         }
 
     }
