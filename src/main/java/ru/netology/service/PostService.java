@@ -2,14 +2,14 @@ package ru.netology.service;
 
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
-import ru.netology.repository.PostRepository;
+import ru.netology.repository.IPostRepository;
 
 import java.util.List;
 
 public class PostService implements IPostService {
-    private final PostRepository repository;
+    private final IPostRepository repository;
 
-    public PostService(PostRepository repository) {
+    public PostService(IPostRepository repository) {
         this.repository = repository;
     }
 
