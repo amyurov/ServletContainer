@@ -9,7 +9,7 @@ public interface IPostRepository {
 
     List<Post> all();
 
-    Optional getById(long id);
+    Optional<Post> getById(long id);
 
     Post save(Post post);
 

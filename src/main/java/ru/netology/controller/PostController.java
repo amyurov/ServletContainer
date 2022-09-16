@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
-import ru.netology.service.PostService;
+import ru.netology.service.IPostService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,9 +15,9 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 @Controller
 public class PostController {
     public static final String APPLICATION_JSON = "application/json";
-    private final PostService service;
+    private final IPostService service;
 
-    public PostController(PostService service) {
+    public PostController(IPostService service) {
         this.service = service;
     }
 
