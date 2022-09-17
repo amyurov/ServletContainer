@@ -1,45 +1,18 @@
 package ru.netology.service;
 
-import org.springframework.stereotype.Service;
-import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
-import ru.netology.repository.IPostRepository;
 
 import java.util.List;
-@Service
-public class PostService implements IPostService {
-    private final IPostRepository repository;
 
-    public PostService(IPostRepository repository) {
-        this.repository = repository;
-    }
+public interface PostService {
 
-    @Override
-    public List<Post> all() {
-        if (repository.all().isEmpty()) {
-            throw new NotFoundException("No posts have been created yet");
-        }
-        return repository.all();
-    }
+    List<Post> all();
 
-    @Override
-    public Post getById(long id) {
-        return repository.getById(id).orElseThrow(NotFoundException::new);
-    }
+    Post getById(long id);
 
-    @Override
-    public Post save(Post post) {
-        return repository.save(post);
-    }
+    Post save(Post post);
 
-    @Override
-    public Post update(Post post) {
-        return repository.update(post);
-    }
+    Post update(Post post);
 
-    @Override
-    public void removeById(long id) {
-        repository.removeById(id);
-    }
-
+    void removeById(long id);
 }
