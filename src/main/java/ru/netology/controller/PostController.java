@@ -3,7 +3,6 @@ package ru.netology.controller;
 import com.google.gson.Gson;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
-import ru.netology.service.IPostService;
 import ru.netology.service.PostService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +14,9 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 public class PostController {
     public static final String APPLICATION_JSON = "application/json";
-    private final IPostService service;
+    private final PostService service;
 
-    public PostController(IPostService service) {
+    public PostController(PostService service) {
         this.service = service;
     }
 
