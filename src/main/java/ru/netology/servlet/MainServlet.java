@@ -1,8 +1,8 @@
 package ru.netology.servlet;
 
 import ru.netology.controller.PostController;
-import ru.netology.repository.PostRepository;
-import ru.netology.service.PostService;
+import ru.netology.repository.PostRepositoryImpl;
+import ru.netology.service.PostServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +20,8 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        final var repository = new PostRepository();
-        final var service = new PostService(repository);
+        final var repository = new PostRepositoryImpl();
+        final var service = new PostServiceImpl(repository);
         controller = new PostController(service);
     }
 
