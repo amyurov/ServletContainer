@@ -1,8 +1,8 @@
 package ru.netology.servlet;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
-import ru.netology.repository.PostRepository;
-import ru.netology.service.PostService;
+import ru.netology.service.PostServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,15 +13,18 @@ import java.io.IOException;
 public class MainServlet extends HttpServlet {
     private static final String GET = "GET";
     private static final String POST = "POST";
+    private static final String PUT = "PUT";
     private static final String DELETE = "DELETE";
 
     private PostController controller;
 
     @Override
     public void init() throws ServletException {
-        final var repository = new PostRepository();
-        final var service = new PostService(repository);
-        controller = new PostController(service);
+        final var context = new AnnotationConfigApplicationContext("ru.netology");
+
+        final var repository = context.getBean("postRepository");
+        final var service = context.getBean(PostServiceImpl.class);
+        controller = context.getBean(PostController.class);
     }
 
     @Override
@@ -45,6 +48,11 @@ public class MainServlet extends HttpServlet {
 
             if (method.equals(POST) && path.equals("/api/posts")) {
                 controller.save(req.getReader(), resp);
+                return;
+            }
+
+            if (method.equals(PUT) && path.equals("/api/posts")) {
+                controller.update(req.getReader(), resp);
                 return;
             }
 
